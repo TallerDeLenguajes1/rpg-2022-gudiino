@@ -48,4 +48,12 @@ public class Personaje
         Console.WriteLine("Edad: "+Edad2()+" años");
         Console.WriteLine("Salud: "+Salud);
     }
+    public void MuestraCaracter(){
+        Console.WriteLine("Caracteristicas del Personaje");
+        Console.WriteLine("Velocidad: {0}", Velocidad.ToString());
+        Console.WriteLine("Destreza: {0}", Destreza);
+        Console.WriteLine("Fuerza: {0}", Fuerza);
+        Console.WriteLine("Nivel: {0}", Nivel);
+        Console.WriteLine("Armadura: {0}", Armadura);
+    }
 }

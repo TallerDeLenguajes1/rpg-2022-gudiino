@@ -30,4 +30,7 @@ Console.WriteLine("Fecha de nacimiento: {0:d}\n", nace.Date);
 Personaje jugador1 = new Personaje(TipoJugador,nom,ApodoJugador,nace);
 Console.WriteLine("************************");
 jugador1.MuestraDatos();
+Console.WriteLine();
+jugador1 = new Personaje();
+jugador1.MuestraCaracter();
 Console.WriteLine("\nFin.");
