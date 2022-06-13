@@ -56,4 +56,32 @@ public class Personaje
         Console.WriteLine("Nivel: {0}", Nivel);
         Console.WriteLine("Armadura: {0}", Armadura);
     }
+    //MECANICA DEL COMBATE
+    //valores de ataques
+    public int PD(){//PoderDeDisparo
+        return Destreza*Fuerza*Nivel;
+    }
+    public int ED(){//EfectividadDeDisparo
+        Random numRan= new Random();
+        return (numRan.Next(1,100))/100;
+    }
+    public int VA(){//ValorDeAtaque
+        return PD()*ED();
+    }
+    //valores de defensa
+    public int PDEF(){//PoderDeDefensa
+        return Armadura*Velocidad;
+    }
+    //resultado del enfrentamiento
+    public int MDP(){//MaximoDanioProvocable
+        int mdp=50000;
+        return mdp;
+    }
+    public int DP(int va, int ed){//DanioProvocado
+        dp = (((va*ed)-PDEF())/MDP())*100;
+        return DP;
+    }
+    public void ActualizarSalud(){
+        Salud=Salud-dp;
+    }
 }
