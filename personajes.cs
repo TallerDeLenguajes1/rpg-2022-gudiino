@@ -4,45 +4,52 @@ public class Personaje
     //DATOS
     public int Tipo;
     public enum Tipos{SoldadoModerno,GerreroMediaval,SoldadoInterestelar,Alien};
-    public int Nombre;
-    public enum Nombres{Jorge, Juan, Mario, Luciana, Marcos};
+    public string Nombre;
     public int Apodo;
     public enum Apodos{Destructor,Malote,Viejo,Fantasma,Nerd};
     public DateTime FecNac;
     public int Edad;//0 a 300
-    public float Salud;//100
+    public double Salud;//100
     //CARACTERISTICAS
-    public int Velocidad;//1 a 10
-    public int Destreza;//1 a 5
-    public int Fuerza;//1 a 10
-    public int Nivel;//1 a 10
-    public int Armadura;//1 a 10
-    public Personaje(int tipoo, int nomm, int apodoo, DateTime nace){
-        Tipo=tipoo;
+    public double Velocidad;//1 a 10
+    public double Destreza;//1 a 5
+    public double Fuerza;//1 a 10
+    public double Nivel;//1 a 10
+    public double Armadura;//1 a 10
+    Random numRan= new Random();
+    DateTime actual = DateTime.Now;
+    public Personaje(string nomm){
+        Tipo=numRan.Next(4);
         Nombre=nomm;
-        Apodo=apodoo;
-        FecNac=nace;
+        Apodo=numRan.Next(5);
+        DateTime inicio = actual.AddYears(-300);
+        FecNac = inicio.AddDays(numRan.Next(0,(actual-inicio).Days));
         Salud=100;
-    }
-    public int Edad2()
-    {
-        DateTime actual = DateTime.Now;
-        var edad = actual - FecNac;
-        int anios = (int)(edad.TotalDays / 365.25);
-        return anios;
-    }
-    public Personaje(){
-        Random numRan= new Random();
         Velocidad=numRan.Next(1,10);
         Destreza=numRan.Next(1,5);
         Fuerza=numRan.Next(1,10);
         Nivel=numRan.Next(1,10);
         Armadura=numRan.Next(1,10);
     }
+    //  public Personaje(){
+    //     Velocidad=numRan.Next(1,10);
+    //     Destreza=numRan.Next(1,5);
+    //     Fuerza=numRan.Next(1,10);
+    //     Nivel=numRan.Next(1,10);
+    //     Armadura=numRan.Next(1,10);
+    // }
+    public int Edad2()
+    {
+        var edad = actual - FecNac;
+        int anios = (int)(edad.TotalDays / 365.25);
+        return anios;
+    }
+   
     public void MuestraDatos(){
         Console.WriteLine("Datos del Personaje");
+        Console.WriteLine("-------------------");
         Console.WriteLine("Tipo: {0}", Enum.GetName(typeof(Tipos), Tipo));
-        Console.WriteLine("Nombre: {0}", Enum.GetName(typeof(Nombres), Nombre));
+        Console.WriteLine("Nombre: "+Nombre);
         Console.WriteLine("Apodo: {0}", Enum.GetName(typeof(Apodos), Apodo));
         Console.WriteLine("Fecha de nacimiento: {0:d}", FecNac);
         Console.WriteLine("Edad: "+Edad2()+" años");
@@ -50,7 +57,8 @@ public class Personaje
     }
     public void MuestraCaracter(){
         Console.WriteLine("Caracteristicas del Personaje");
-        Console.WriteLine("Velocidad: {0}", Velocidad.ToString());
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine("Velocidad: {0}", Velocidad);
         Console.WriteLine("Destreza: {0}", Destreza);
         Console.WriteLine("Fuerza: {0}", Fuerza);
         Console.WriteLine("Nivel: {0}", Nivel);
@@ -58,30 +66,31 @@ public class Personaje
     }
     //MECANICA DEL COMBATE
     //valores de ataques
-    public int PD(){//PoderDeDisparo
-        return Destreza*Fuerza*Nivel;
+    public double PD(){//PoderDeDisparo
+        return ((double)(Destreza*Fuerza*Nivel));
     }
-    public int ED(){//EfectividadDeDisparo
+    public double ED(){//EfectividadDeDisparo
         Random numRan= new Random();
-        return (numRan.Next(1,100))/100;
+        return (numRan.Next(1,100));
     }
-    public int VA(){//ValorDeAtaque
-        return PD()*ED();
+    public double VA(){//ValorDeAtaque
+        return PD()*ED()/100;
     }
     //valores de defensa
-    public int PDEF(){//PoderDeDefensa
+    public double PDEF(){//PoderDeDefensa
         return Armadura*Velocidad;
     }
     //resultado del enfrentamiento
-    public int MDP(){//MaximoDanioProvocable
-        int mdp=50000;
-        return mdp;
+    public double MDP(){//MaximoDanioProvocable
+        return 50000;
     }
-    public int DP(int va, int ed){//DanioProvocado
-        dp = (((va*ed)-PDEF())/MDP())*100;
-        return DP;
+    public void DP(double va, double ed){//DanioProvocado
+        Salud=Salud-(((va*ed)-PDEF())/MDP())*100;
     }
-    public void ActualizarSalud(){
-        Salud=Salud-dp;
+    public double ActSalud(){
+        return Math.Max(0,Math.Round(Salud,2));
+    }
+    public void Atacar(Personaje enemigoX){
+        enemigoX.DP(VA(),ED());
     }
 }
