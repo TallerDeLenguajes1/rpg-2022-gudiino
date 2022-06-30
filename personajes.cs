@@ -93,4 +93,7 @@ public class Personaje
     public void Atacar(Personaje enemigoX){
         enemigoX.DP(VA(),ED());
     }
+    public void Ganador(){
+        Salud=Salud+10;
+    }
 }
