@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
 Console.WriteLine("Inicializacion de la carga de Datos del Personaje");
 Console.WriteLine("Ingrese Nombre Jugador 1");
@@ -112,10 +115,21 @@ using (StreamWriter StreamW = new StreamWriter(Fstream))
 {
     foreach (Personaje juga in jugadores)
     {
-        StreamW.WriteLine("Ganador -> Fecha: "+actual.ToString()+' '+"Nombre: "+juga.Nombre);//asignamo la extencion del arreglo en base al tamaño menos uno
+        StreamW.WriteLine(actual.ToString()+'.'+juga.Nombre);//asignamo la extencion del arreglo en base al tamaño menos uno
     }
 }
 //cerrar el archivo
 Fstream.Close();
+//apertura del archivo
+FileStream MiArchivo = new FileStream(ruta, FileMode.Open);
+StreamReader StrReader = new StreamReader(MiArchivo);
+string linea = "";
+List<string[]> LecturaDelArchivo = new List<string[]>();
+
+while ((linea = StrReader.ReadLine()) != null)
+{
+    string[] Fila = linea.Split('.');
+    //escribir aqui los datos a mostrar en pantalla
+}
 Console.WriteLine("**************************************");
 Console.WriteLine("\nFin.");
