@@ -31,13 +31,6 @@ public class Personaje
         Nivel=numRan.Next(1,10);
         Armadura=numRan.Next(1,10);
     }
-    //  public Personaje(){
-    //     Velocidad=numRan.Next(1,10);
-    //     Destreza=numRan.Next(1,5);
-    //     Fuerza=numRan.Next(1,10);
-    //     Nivel=numRan.Next(1,10);
-    //     Armadura=numRan.Next(1,10);
-    // }
     public int Edad2()
     {
         var edad = actual - FecNac;
@@ -74,7 +67,7 @@ public class Personaje
         return (numRan.Next(1,100));
     }
     public double VA(){//ValorDeAtaque
-        return PD()*ED()/100;
+        return PD()*ED()/100;//si ed es 100, va = pd
     }
     //valores de defensa
     public double PDEF(){//PoderDeDefensa
@@ -85,7 +78,8 @@ public class Personaje
         return 50000;
     }
     public void DP(double va, double ed){//DanioProvocado
-        Salud=Salud-(((va*ed)-PDEF())/MDP())*100;
+        double dp=Math.Abs((((va*ed)-PDEF())/MDP())*100);//el daño se va acumulado por separado o solo se resta en salud?
+        Salud=Salud-dp;//actualizando salud
     }
     public double ActSalud(){
         return Math.Max(0,Math.Round(Salud,2));
@@ -93,7 +87,30 @@ public class Personaje
     public void Atacar(Personaje enemigoX){
         enemigoX.DP(VA(),ED());
     }
-    public void Ganador(){
-        Salud=Salud+10;
+    public void PremioSalud(){
+        Salud=Salud+10;//10 puntos mas de salud
+    }
+    public void PremioFuerza(){
+        double az=numRan.Next(5,10);
+        Fuerza=Fuerza*(1+az/100);// de 5 a 10 % de aumento en fuerza
+    }
+    public void CargarPremio(){
+        Console.WriteLine();
+        Console.WriteLine("ELIJA SU PREMIO");
+        Console.WriteLine("Opcion 1 --> +10 puntos de Salud");
+        Console.WriteLine("Opcion 2 --> 5% a 10% de Fuerza");
+        Console.Write("Ingrese Numero de Opcion: ");
+        int a=Convert.ToInt32(Console.ReadLine());
+        if(a==1)
+        {
+            Console.WriteLine("Salud: {0}", Math.Round(Salud,2));
+            PremioSalud();
+            Console.WriteLine("Salud Actual: {0}", Math.Round(Salud,2));
+        }else{
+            Console.WriteLine("Fuerza: {0}", Math.Round(Fuerza,2));
+            PremioFuerza();
+            Console.WriteLine("Fuerza Actual: {0}", Math.Round(Fuerza,2));
+        }
+        Console.WriteLine();
     }
 }
