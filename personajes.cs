@@ -2,23 +2,24 @@ using System;
 public class Personaje
 {
     //DATOS
-    public int Tipo;
+    public int Tipo { get; set; }
     public enum Tipos{SoldadoModerno,GerreroMediaval,SoldadoInterestelar,Alien};
-    public string Nombre;
-    public int Apodo;
+    public string Nombre { get; set; }
+    public int Apodo { get; set; }
     public enum Apodos{Destructor,Malote,Viejo,Fantasma,Nerd};
-    public DateTime FecNac;
-    public int Edad;//0 a 300
-    public double Salud;//100
+    public DateTime FecNac { get; set; }
+    public int Edad { get; set; }//0 a 300
+    public double Salud { get; set; }//100
     //CARACTERISTICAS
-    public double Velocidad;//1 a 10
-    public double Destreza;//1 a 5
-    public double Fuerza;//1 a 10
-    public double Nivel;//1 a 10
-    public double Armadura;//1 a 10
+    public double Velocidad { get; set; }//1 a 10
+    public double Destreza { get; set; }//1 a 5
+    public double Fuerza { get; set; }//1 a 10
+    public double Nivel { get; set; }//1 a 10
+    public double Armadura { get; set; }//1 a 10
+    public string Territorio;
     Random numRan= new Random();
     DateTime actual = DateTime.Now;
-    public Personaje(string nomm){
+    public Personaje(string nomm, string t){
         Tipo=numRan.Next(4);
         Nombre=nomm;
         Apodo=numRan.Next(5);
@@ -30,6 +31,8 @@ public class Personaje
         Fuerza=numRan.Next(1,10);
         Nivel=numRan.Next(1,10);
         Armadura=numRan.Next(1,10);
+        Edad=Edad2();
+        Territorio=t;
     }
     public int Edad2()
     {
@@ -46,7 +49,9 @@ public class Personaje
         Console.WriteLine("Apodo: {0}", Enum.GetName(typeof(Apodos), Apodo));
         Console.WriteLine("Fecha de nacimiento: {0:d}", FecNac);
         Console.WriteLine("Edad: "+Edad2()+" años");
+        Console.WriteLine("Provincia a cargo: {0}",Territorio);
         Console.WriteLine("Salud: "+Salud);
+        Console.WriteLine();
     }
     public void MuestraCaracter(){
         Console.WriteLine("Caracteristicas del Personaje");
