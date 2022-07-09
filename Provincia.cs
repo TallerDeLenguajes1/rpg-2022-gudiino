@@ -15,7 +15,7 @@ namespace rpg
         public string nombre { get; set; }
     }
 
-    public class Root
+    public class RootP
     {
         public int cantidad { get; set; }
         public int inicio { get; set; }
@@ -23,8 +23,4 @@ namespace rpg
         public List<Provincia> provincias { get; set; }
         public int total { get; set; }
     }
-
-
-
-
 }

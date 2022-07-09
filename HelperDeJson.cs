@@ -17,8 +17,6 @@ namespace rpg
                     archivoOpen.Close();
                 }
             }
-
-
             return documento;
         }
 

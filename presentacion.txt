@@ -1,5 +1,5 @@
 BIENVENIDO!!
 Este es un juego de ROL.
-En una dimension paralela el Estado Argentino se encuentra en un punto donde la guerra entre Provincias es inevitable, las causas son varias, entre la corrupcion de los Gobernantes, el conflicto de intereses entre las partes y lo mas destacado, la separacion de las fuerzas militares por zonas.
-Ud representara a  un Comandante en Jefe a cargo de un Estado Provicial, estara a cargo de la movilizacion de recursos y las ordenes de ataque.
-Su obgetivo es acabar con las Provincias que se enfrentan con su territorio, dejando al territorio de la misma 100% destruido, de lo contrario si su territorio es 100% destruido, UD habra PERDIDO, no solo la guerra, sino tambien su vida.
+En una dimension paralela, El Estado Argentino se encuentra en un punto donde la corrupcion de los Gobernantes, el conflicto de intereses entre las Provincias y lo mas destacado, la separacion de las fuerzas militares por zonas, causa que la guerra entre Provincias sea inevitable.
+Ud representara a  un Comandante en Jefe a cargo de un Estado Provicial, estara a cargo de todo.
+Su obgetivo es acabar con el 100% de las posiciones estrategicas de la Provincias a la que se enfrentara, de esta manera Ud. sera el Ganador, de lo contrario si su territorio es 100% destruido, UD habra PERDIDO, no solo la guerra, sino tambien su vida.
