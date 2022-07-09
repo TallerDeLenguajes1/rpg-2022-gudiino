@@ -99,8 +99,13 @@ namespace rpg
             String nom="JORGE GUDIÑO";//PROVISORIO
             Console.WriteLine(nom);
             //nom = Console.ReadLine();
+            Console.WriteLine("Ingrese su Nombre Clave");
+            String nomClav="Estudiante";//PROVISORIO
+            Console.WriteLine(nomClav);
+            //nomClav = Console.ReadLine();
             Console.WriteLine("Elija el numero correspondiente a la Provincia de la cual estara a cargo");
             List<string> nomprov=GetProvinciasArgentinas();
+            List<string> nomClave=GetCivilizacion();
             //muestra provincias en lista
             int cant=0;
             foreach (var item in nomprov)
@@ -112,7 +117,7 @@ namespace rpg
             int seleccion= Convert.ToInt32(Console.ReadLine());
             string provSelec=nomprov[seleccion];
             nomprov.Remove(provSelec);
-            Personaje jugador1 = new Personaje(nom,provSelec);
+            Personaje jugador1 = new Personaje(nom,provSelec,nomClav);
             List<Personaje> jugadores=new List<Personaje>();
             jugadores.Add(jugador1);
             //carga al azar nombres de pesonajes de una lista de nombres
@@ -129,8 +134,13 @@ namespace rpg
                 int sel2=numRan.Next(0,lng2);
                 string noomprov=nomprov[sel2];
                 nomprov.Remove(noomprov);
+                //seleccion de nombre Clave al azar
+                int lng3=nomClave.Count;
+                int sel3=numRan.Next(0,lng3);
+                string nomC=nomClave[sel3];
+                nomClave.Remove(nomC);
                 //pasamos los datos para generar datos personaje
-                jugadores.Add(new Personaje(nomm[0],noomprov));
+                jugadores.Add(new Personaje(nomm[0],noomprov, nomC));
                 cant++;
             }
             // cant=1;
@@ -178,6 +188,53 @@ namespace rpg
                 Console.WriteLine("Problemas de acceso a la API");
             }
             return NomProv;
+        }
+        //*****************************************************************api nombre clave
+        //************************************************************
+        private static List<string> GetCivilizacion()
+        {
+            var url = @"https://age-of-empires-2-api.herokuapp.com/api/v1/civilizations";
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.Accept = "application/json";
+            List<string> nuevo = new List<string>();
+            try
+            {
+                using (WebResponse response = request.GetResponse())
+                {
+                    using (Stream strReader = response.GetResponseStream())
+                    {
+                        if (strReader == null) return nuevo;
+                        using (StreamReader objReader = new StreamReader(strReader))
+                        {
+                            //const string NombreArchivo = "civiliz.json";
+                            //var miHelperdeArchivos = new HelperDeJson();
+                            string responseBody = objReader.ReadToEnd();
+                            RootC ListCivRec = JsonSerializer.Deserialize<RootC>(responseBody);
+                            //Civilization ListCivilizacion = JsonSerializer.Deserialize<Civilization>(responseBody);
+                            foreach (Civilization item in ListCivRec.civilizations)
+                            {
+                                nuevo.Add(item.name);
+                            }
+                            // //Guardo el archivo
+                            // Console.WriteLine();
+                            // Console.WriteLine("--Serializando--");
+                            // string CJson = JsonSerializer.Serialize(ListCivRec);
+                            // Console.WriteLine("Archivo Serializado : " + ListCivRec);
+                            // Console.WriteLine("--Guardando--");
+                            // miHelperdeArchivos.GuardarArchivoTexto(NombreArchivo, CJson);
+                            
+
+                        }
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                Console.WriteLine("Problemas de acceso a la API");
+            }
+            return nuevo;
         }
         //**************************************************
         private static void GuardarPartida(List<Personaje> jugadores)
@@ -240,56 +297,78 @@ namespace rpg
             {
                 return;
             }
-            int cantEnf=1;//para mostrar los primeros enfrentamientos
-            Console.WriteLine("INICIO DEL ENFRENTAMIENTO");
             Root jugador1=jugadores[0];
-            Root jugador2=jugadores[2];
-            while(Personaje.ActSalud(jugador1)!=0 && Personaje.ActSalud(jugador2)!=0)
+            int CantEnfrent=1;
+            Console.WriteLine("INICIO DEL ENFRENTAMIENTOS");
+            while (jugador1.Salud>0 || jugadores.Count==1)
             {
-                if(cantEnf==1){
-                    Console.WriteLine("..............................");
-                    Console.WriteLine("Ronda "+(cantEnf));
-                    Console.WriteLine("Ataque jugador {0} a jugador {1}", jugador1.Nombre, jugador2.Nombre);
-                    Personaje.Atacar(jugador1,jugador2);
-                    Console.WriteLine("Salud jugador {0}: {1}",jugador2.Nombre,Personaje.ActSalud(jugador2));
-                    if (Personaje.ActSalud(jugador2)!=0)
-                    {
-                        Console.WriteLine("Ataque jugador {0} a jugador {1}", jugador2.Nombre, jugador1.Nombre);
-                        Personaje.Atacar(jugador2,jugador1);
-                        Console.WriteLine("Salud jugador {0}: {1}",jugador1.Nombre,Personaje.ActSalud(jugador1));  
+                int cantEnf=1;//para mostrar los primeros enfrentamientos
+                Console.WriteLine("ENFRENTAMIENTOS {0}",CantEnfrent);
+                CantEnfrent++;
+                //Root jugador1=jugadores[0];
+                Root jugador2=jugadores[1];
+                while(Personaje.ActSalud(jugador1)!=0 && Personaje.ActSalud(jugador2)!=0)
+                {
+                    if(cantEnf==1){
+                        Console.WriteLine("..............................");
+                        Console.WriteLine("Ronda "+(cantEnf));
+                        Console.WriteLine("Cantidad de ataques: 3 ");
+                        Console.WriteLine("Atacante: {0}; Territorio {1}", jugador1.Nombre, jugador1.Territorio);
+                        Console.WriteLine("Atacado: {0}; Territorio {1}", jugador2.Nombre, jugador2.Territorio);
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Personaje.Atacar(jugador1,jugador2);
+                        }
+                        Console.WriteLine("Resultado");
+                        Console.WriteLine("Estado Territorio atacado {0}%",Personaje.ActSalud(jugador2));
+                        Console.WriteLine();
+                        if (Personaje.ActSalud(jugador2)!=0)
+                        {
+                            Console.WriteLine("Atacante: {0}; Territorio {1}", jugador2.Nombre, jugador2.Territorio);
+                            Console.WriteLine("Atacado: {0}; Territorio {1}", jugador1.Nombre, jugador1.Territorio);
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Personaje.Atacar(jugador2,jugador1);
+                            }
+                            Console.WriteLine("Resultado");
+                            Console.WriteLine("Estado Territorio atacado {0}%",Personaje.ActSalud(jugador1));
+                        }
+                        Console.WriteLine("..............................");
+                        Console.Write("Rondas:");
+                    }else{
+                        Personaje.Atacar(jugador1,jugador2);
+                        if (Personaje.ActSalud(jugador2)!=0){
+                            Personaje.Atacar(jugador2,jugador1); 
+                        }
+                        Console.Write("-{0}",cantEnf);
                     }
-                    Console.WriteLine("..............................");
-                    Console.Write("Rondas:");
-                }else{
-                    Personaje.Atacar(jugador1,jugador2);
-                    if (Personaje.ActSalud(jugador2)!=0){
-                        Personaje.Atacar(jugador2,jugador1); 
-                    }
-                    Console.Write("-{0}",cantEnf);
+                    cantEnf++;
                 }
-                cantEnf++;
-            }
-            //muestra final de la salud de los jugadores
-            Console.WriteLine("\nSalud jugador {0}: {1}",jugador2.Nombre,Personaje.ActSalud(jugador2));
-            Console.WriteLine("Salud jugador {0}: {1}",jugador1.Nombre,Personaje.ActSalud(jugador1));
-            
-            Console.WriteLine("\n________________GANADOR_______________");
-            Console.WriteLine("|                                    |");
-            if (jugador1.Salud>jugador2.Salud)
-            {
-                Console.WriteLine($"              {jugador1.Nombre}                 ");
-                Console.WriteLine("|____________________________________|");
-                jugadores.Remove(jugador2);
-                Personaje.CargarPremio(jugador1);
+                //muestra final de la salud de los jugadores
+                Console.WriteLine("\nSalud jugador {0}: {1}",jugador2.Nombre,Personaje.ActSalud(jugador2));
+                Console.WriteLine("Salud jugador {0}: {1}",jugador1.Nombre,Personaje.ActSalud(jugador1));
+                if (jugador1.Salud>jugador2.Salud)
+                {
+                    Console.WriteLine("\n________________GANADOR_______________");
+                    Console.WriteLine("|                                    |");
+                    Console.WriteLine($"              {jugador1.Nombre}                 ");
+                    Console.WriteLine("|____________________________________|");
+                    jugadores.Remove(jugador2);
+                    Personaje.CargarPremio(jugador1);
+                    GuardarGanador(jugador1);
 
-            }else{
-                Console.WriteLine($"              {jugador2.Nombre}                ");
-                Console.WriteLine("|____________________________________|");
-                jugadores.Remove(jugador1);
-                Personaje.CargarPremio(jugador2);
+                }else{
+                    GuardarGanador(jugador2);
+                    Console.WriteLine("___________________________________");
+                    Console.WriteLine("|                                  |");
+                    Console.WriteLine("|             GAME OVER            |");
+                    Console.WriteLine("|         Intentelo de NUEVO       |");
+                    Console.WriteLine("|__________________________________|");
+                    Continuar();
+                }
             }
         }
-        private static void GuardarGanador(List<Root> jugadores)
+        private static void GuardarGanador(Root juga)
         {//******************* guardar dato en csv
             string archivo = "Ganadores.csv";
             if (!File.Exists(archivo))//validacion de su existencia
@@ -302,10 +381,7 @@ namespace rpg
             DateTime actual = DateTime.Now;
             using (StreamWriter StreamW = new StreamWriter(Fstream))
             {
-                foreach (Root juga in jugadores)
-                {
-                    StreamW.WriteLine(actual.ToString()+','+juga.Nombre);
-                }
+                StreamW.WriteLine(actual.ToString()+','+juga.Nombre+','+juga.Territorio);
             }
             //cerrar el archivo
             Fstream.Close(); 
