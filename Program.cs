@@ -90,7 +90,7 @@ namespace rpg
         {
             //lista de nombres reducida
             string listaNombres = "nombres-2015.csv";//https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.21
-            List<string[]> LecturaListaNom= HelperCsv.LeerCsv(listaNombres, ',');
+            List<string[]> LecturaListaNom= HelperCSV.LeerCsv(listaNombres, ',');
             // foreach (var item in LecturaListaNom)
             // {
             //     Console.WriteLine("Nombre: {0}; Cantidad: {1}; Año: {2}",item[0], item[1], item[2]);
@@ -375,16 +375,12 @@ namespace rpg
             {
                 File.Create(archivo);
             }
-            //abrir el archivo para su escritura
-            FileStream Fstream = new FileStream(archivo, FileMode.Open);
-            // string exten="";
+            List<string[]> nuevo=HelperCSV.LeerCsv(archivo,',');
             DateTime actual = DateTime.Now;
-            using (StreamWriter StreamW = new StreamWriter(Fstream))
-            {
-                StreamW.WriteLine(actual.ToString()+','+juga.Nombre+','+juga.Territorio);
-            }
-            //cerrar el archivo
-            Fstream.Close(); 
+            // string exten="";
+            string[] linea = {"0"+actual.ToString(),juga.Nombre,juga.Territorio};
+            nuevo.Add(linea);
+            HelperCSV.GuardarCSV(archivo,nuevo);
         }
     }
 }
