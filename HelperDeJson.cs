@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
-
 namespace rpg
 {
     public class HelperDeJson
     {
-
         public string AbrirArchivoTexto(string nombreArchivo)
         {
             string documento;
-              using (var archivoOpen = new FileStream(nombreArchivo, FileMode.Open))
+            using (var archivoOpen = new FileStream(nombreArchivo, FileMode.Open))
             {
                 using (var strReader = new StreamReader(archivoOpen))
                 {
@@ -19,10 +17,9 @@ namespace rpg
             }
             return documento;
         }
-
         public void GuardarArchivoTexto(string nombreArchivo, string datos)
         {
-             using(var archivo = new FileStream(nombreArchivo, FileMode.Create))
+            using(var archivo = new FileStream(nombreArchivo, FileMode.Create))
             {
                 using (var strWriter = new StreamWriter(archivo))
                 {
