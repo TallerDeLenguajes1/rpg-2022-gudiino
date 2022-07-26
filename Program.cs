@@ -19,37 +19,52 @@ namespace rpg
             {
                 menu();
                 Console.Write("Seleccion: ");
-                opc= Convert.ToInt32(Console.ReadLine());
+                string? opcaux=Console.ReadLine();
+                //opc= Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine();
-                switch (opc)
+                if(int.TryParse(opcaux,out opc)&& opc>=0 && opc<=5)
                 {
-                    case 0:
-                        opc=0;
-                        break;
-                    case 1:
-                        jugadores=IniciarPartida();
-                        //List<Personaje> jugadores=Iniciar();
-                        //jugadores0=jugadores;
-                        break;
-                    case 2:
-                        MostrarPersonaje(jugadores[0]);
-                        break;
-                    case 3:
-                        menuJugar(jugadores);
-                        break;
-                    case 4:
-                        MenuMostrar(jugadores);
-                        break;
-                    case 5:
-                        MostrarGanadores();
-                        break; 
+                    switch (opc)
+                    {
+                        case 0:
+                            Console.WriteLine("============================");
+                            Console.WriteLine("  ADIOS, GRACIAS POR JUGAR ");
+                            Console.WriteLine("             A             ");
+                            Console.WriteLine("     BATALLA PROVINCIAL    ");
+                            Console.WriteLine("============================");
+                            opc=0;
+                            break;
+                        case 1:
+                            jugadores=IniciarPartida();
+                            //List<Personaje> jugadores=Iniciar();
+                            //jugadores0=jugadores;
+                            break;
+                        case 2:
+                            MostrarPersonaje(jugadores[0]);
+                            break;
+                        case 3:
+                            menuJugar(jugadores);
+                            break;
+                        case 4:
+                            MenuMostrar(jugadores);
+                            break;
+                        case 5:
+                            MostrarGanadores();
+                            break; 
+                    }
+                }else{
+                    Console.WriteLine("===========================");
+                    Console.WriteLine(" Ingrese una opcion Valida");
+                    Console.WriteLine("===========================");
+                    opc=1;
+                    Console.WriteLine();
                 }
             }
             Console.WriteLine();
-            Console.WriteLine("\nFIN.");
+            Console.WriteLine("\nFIN PROGRAMA.");
         }
         //funciones o metodos
-        //************************************************************
+        //****************************************************************
         private static void PRESENTACION()
         {
             String? line;
@@ -71,69 +86,84 @@ namespace rpg
             }
             Continuar();
         }
-
+        //*****************************************************************
         private static void Continuar()
         {
             Console.WriteLine();
             Console.WriteLine("ENTER para IR al MENU");
             Console.ReadLine();
         }
-
         //***************************************************************
         private static void menu()
         {
             Console.WriteLine("------MENU-----");
             Console.WriteLine();
-            Console.WriteLine("1 -> INICIAR NUEVA PARTIDA"); 
+            Console.WriteLine("1 -> CARGAR NUEVA PARTIDA"); 
             Console.WriteLine("2 -> MOSTRAR PERSONAJE PRINCIPAL");
-            //Console.WriteLine("2 -> CARGAR PARTIDA ANTERIOR");
-            Console.WriteLine("3 -> JUGAR");
-            //Console.WriteLine("3 -> JUGAR PARTIDA ANTERIOS");
+            Console.WriteLine("3 -> JUGAR UNA PARTIDA");
             Console.WriteLine("4 -> MOSTRAR JUGADORES");
             Console.WriteLine("5 -> MOSTRAR GANADORES");
             Console.WriteLine("0 -> SALIR");
             Console.WriteLine();
         }
+        //******************************************************************
         private static void menuJugar(List<Personaje> jugadores)
         {
-            Console.WriteLine("------MENU-----");
-            Console.WriteLine();
-            Console.WriteLine("1 -> JUGAR NUEVA PARTIDA");
-            Console.WriteLine("2 -> JUGAR PARTIDA ANTERIO");
-            Console.WriteLine("0 -> SALIR");
-            Console.Write("Seleccion: ");
-            int opc= Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
-            switch (opc)
+            int opc=1;
+            while(opc!=0)
             {
-                case 0:
-                    break; 
-                case 1:
-                    if (jugadores.Count!=0)
+                Console.WriteLine("------MENU-----");
+                Console.WriteLine();
+                Console.WriteLine("1 -> JUGAR NUEVA PARTIDA");
+                Console.WriteLine("2 -> JUGAR PARTIDA GUARDADA");
+                Console.WriteLine("0 -> SALIR");
+                Console.Write("Seleccion: ");
+                string? opcaux=Console.ReadLine();
+                Console.WriteLine();
+                if(int.TryParse(opcaux,out opc)&& opc>=0 && opc<=2)
+                {
+                //int opc= Convert.ToInt32(Console.ReadLine());
+                    switch (opc)
                     {
-                        Jugar2(jugadores);
-                    }else{
-                        Console.WriteLine("La lista de jugadores nuevo esta vacia. Inicie una nueva partida");
-                        Continuar();
+                        case 0:
+                            break; 
+                        case 1:
+                            if (jugadores.Count!=0)
+                            {
+                                Jugar2(jugadores);
+                            }else{
+                                Console.WriteLine("La lista de jugadores nuevo esta vacia. Inicie una nueva partida");
+                                Continuar();
+                                opc=0;
+                            }
+                            break;
+                        case 2:
+                            if (File.Exists("jugadores.json"))
+                            {
+                                List<Personaje>? jugadoresPrevio=new List<Personaje>();
+                                jugadoresPrevio=CargarJugadores();
+                                Jugar2(jugadoresPrevio!);   
+                            }else{
+                                Console.WriteLine("No existe una partida anterior. Inicie una nueva partida y guardela");
+                                Continuar();
+                                opc=0;
+                            }
+                            break;
                     }
-                    break;
-                case 2:
-                    if (File.Exists("jugadores.json"))
-                    {
-                        List<Personaje>? jugadoresPrevio=new List<Personaje>();
-                        jugadoresPrevio=CargarJugadores();
-                        Jugar2(jugadoresPrevio!);   
-                    }else{
-                        Console.WriteLine("No existe una partida anterior. Inicie una nueva partida");
-                        Continuar();
-                    }
-                    break;
+                    Console.WriteLine();
+                }else{
+                    Console.WriteLine("===========================");
+                    Console.WriteLine(" Ingrese una opcion Valida");
+                    Console.WriteLine("===========================");
+                    opc=1;
+                    Console.WriteLine();
+                }
             }
-            Console.WriteLine();
         }
         //***************************************************************
         private static List<Personaje> IniciarPartida()
         {
+            Random numRan= new Random();
             //lista de nombres reducida
             string listaNombres = "nombres-2015.csv";//https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.21
             List<string[]> LecturaListaNom= HelperCSV.LeerCsv(listaNombres, ',');
@@ -159,24 +189,26 @@ namespace rpg
                 Console.WriteLine("Provincia {0}: {1}",cant,item);
                 cant++;
             }
-            Console.Write("Seleccion: ");
-            int seleccion= Convert.ToInt32(Console.ReadLine());
-            if (seleccion<0||seleccion>23)
-            {
-                int intentos=0;
-                Console.WriteLine("Ingrese un numero del 0 al 23 correspondiente a unas de la provincia de la lista");
-                while (intentos!=3 && (seleccion<0||seleccion>23))
-                {
-                    Console.Write("Seleccion: ");
-                    seleccion= Convert.ToInt32(Console.ReadLine()); 
-                    intentos++;  
-                }
-                Console.WriteLine("Intentos Fallidos, salga e intente iniciar de nuevo.");
-                Continuar();
-                return new List<Personaje>();
-            }
+            int seleccion=numRan.Next(25);
+            Console.WriteLine("Seleccion: {0}",seleccion);
+            // int seleccion= Convert.ToInt32(Console.ReadLine());
+            // if (seleccion<0||seleccion>23)
+            // {
+            //     int intentos=0;
+            //     Console.WriteLine("Ingrese un numero del 0 al 23 correspondiente a unas de la provincia de la lista");
+            //     while (intentos!=3 && (seleccion<0||seleccion>23))
+            //     {
+            //         Console.Write("Seleccion: ");
+            //         seleccion= Convert.ToInt32(Console.ReadLine()); 
+            //         intentos++;  
+            //     }
+            //     Console.WriteLine("Intentos Fallidos, salga e intente iniciar de nuevo.");
+            //     Continuar();
+            //     return new List<Personaje>();
+            // }
             string provSelec=nomprov[seleccion];
             Console.WriteLine("Provincia: {0}",provSelec);
+            Console.WriteLine();
             nomprov.Remove(provSelec);
             Personaje jugador1 = new Personaje();
             jugador1=ConstructorPersonaje.AltaPersonaje(nom,provSelec,nomClav);
@@ -185,7 +217,6 @@ namespace rpg
             jugadores.Add(jugador1);
             //carga al azar nombres de pesonajes de una lista de nombres
             cant=0;
-            Random numRan= new Random();
             while(cant!=23)
             {    //seleccion de nombres al azar
                 int lng=LecturaListaNom.Count;
@@ -206,13 +237,6 @@ namespace rpg
                 jugadores.Add(ConstructorPersonaje.AltaPersonaje(nomm[0],noomprov, nomC));
                 cant++;
             }
-            // cant=1;
-            // foreach (var item in jugadores)
-            // {
-            //     Console.WriteLine("Jugador {0}", cant);
-            //     item.MuestraDatos();
-            //     cant++;
-            // }
             Console.WriteLine("DESEEA GUARDAR LA NUEVA PARTIDA CREADA...");
             Console.WriteLine("1--> SI");
             Console.WriteLine("2--> NO");
@@ -220,10 +244,12 @@ namespace rpg
             int seleccion2= Convert.ToInt32(Console.ReadLine());
             if (seleccion2==1)
             {
+                Console.WriteLine();
                 GuardarPartida(jugadores);
                 Console.WriteLine("PARTIDA CREADA Y GUARDADA...");
             }else
             {
+                Console.WriteLine();
                 Console.WriteLine("PARTIDA CREADA...");
             }
             Console.WriteLine();
@@ -260,10 +286,16 @@ namespace rpg
             }
             catch (WebException ex)
             {
-                Console.WriteLine("Problemas de acceso a la API "+ex);
+                Console.WriteLine("==============================");
+                Console.WriteLine(" Problemas de acceso a la API \n"+ex.Message);
+                Console.WriteLine("==============================");
+                Console.WriteLine(" INTENTELO DE NUEVO\n");
+                Console.WriteLine("==============================");
             }
             return NomProv;
         }
+        //********************************************prueba api con HttpClient
+        private static readonly HttpClient client = new HttpClient();
         //*****************************************************************api nombre clave
         //************************************************************
         private static List<string> GetCivilizacion()
