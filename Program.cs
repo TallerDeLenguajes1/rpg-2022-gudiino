@@ -323,12 +323,12 @@ namespace rpg
                     Console.WriteLine();
                     GuardarPartida(jugadores);
                     Console.WriteLine("PARTIDA CREADA Y GUARDADA...");
-                    Console.WriteLine("SALGA Y JUEGUE A SU NUEVA PARTIDA");
+                    Console.WriteLine("AHORA PUEDE SALIR Y JUGAR A SU NUEVA PARTIDA");
                 }else
                 {
                     Console.WriteLine();
                     Console.WriteLine("PARTIDA CREADA...");
-                    Console.WriteLine("SALGA Y JUEGUE A SU NUEVA PARTIDA");
+                    Console.WriteLine("AHORA PUEDE SALIR Y JUGAR  A SU NUEVA PARTIDA");
                 }
                 Console.WriteLine();
                 Continuar();
