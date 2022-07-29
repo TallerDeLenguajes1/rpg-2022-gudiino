@@ -1,6 +1,7 @@
-BIENVENIDO A BATALLA PROVINCIAL!!
+BIENVENIDO AL JUEGO DE ...
+BATALLA PROVINCIAL!!
 Este es un juego de ROL.
-En un Futuro distante donde la longevidad del ser humano en promedio es de 300 años y despues de vivir una larga vida en paz, aquellos que se encuentran en el Estado Argentino, estan en un punto donde a causa de la corrupcion de los Gobernantes, el conflicto de intereses entre las Provincias y la separacion de las fuerzas militares por zonas, causara que la guerra entre Provincias sea inevitable.
-Ud representara a  un Lider a cargo de un Estado Provicial, estara a cargo de todo.
-Su obgetivo es acabar con el 100% de las posiciones estrategicas de la Provincias a la que se enfrentara, de esta manera Ud. sera el Ganador, de lo contrario, si su territorio es 100% destruido, UD habra PERDIDO, no solo la guerra, sino tambien su vida.
+En un Futuro distante donde la longevidad del ser humano en promedio es de 300 años y despues de vivir mucho tiempo en paz, aquellos que habitan en el Estado Argentino, estan en un punto donde la paz se terminara a causa de la corrupcion de los Gobernantes, el conflicto de intereses entre las Provincias y la separacion de las fuerzas militares por zonas, causara una guerra entre Provincias, este desenlace es inevitable.
+Ud representara a  un Lider a cargo de un Estado Provicial.
+Su obgetivo es dar las ordenes de ataque para acabar con el 100% de las posiciones estrategicas de la Provincias a la que se enfrentara, de esta manera Ud. sera el Ganador, de lo contrario, si su territorio es 100% destruido, UD habra PERDIDO.
 Inicie este juego y demuestre que Ud. puede ser un GANADOR.

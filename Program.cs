@@ -22,7 +22,7 @@ namespace rpg
                 string? opcaux=Console.ReadLine();
                 //opc= Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine();
-                if(int.TryParse(opcaux,out opc)&& opc>=0 && opc<=5)
+                if(int.TryParse(opcaux,out opc)&& opc>=0 && opc<=6)
                 {
                     switch (opc)
                     {
@@ -32,7 +32,7 @@ namespace rpg
                             Console.WriteLine("             A             ");
                             Console.WriteLine("     BATALLA PROVINCIAL    ");
                             Console.WriteLine("============================");
-                            opc=0;
+                            opcaux="0";
                             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             Console.WriteLine();
                             break;
@@ -60,7 +60,14 @@ namespace rpg
                             MostrarGanadores();
                             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             Console.WriteLine();
-                            break; 
+                            break;
+                        case 6:
+                            Console.WriteLine("====================================================================");
+                            Console.WriteLine("INICIE UNA NUEVA PARTIDA Y SELECCIONE REEMPLAZAR LA PARTIDA GUARDADA");
+                            Console.WriteLine("====================================================================");
+                            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            Console.WriteLine();
+                            break;
                     }
                 }else{
                     Console.WriteLine("===========================");
@@ -100,19 +107,21 @@ namespace rpg
         private static void Continuar()
         {
             Console.WriteLine();
-            Console.WriteLine("ENTER para IR al MENU");
+            Console.WriteLine("ENTER para VOLVER al MENU");
             Console.ReadLine();
         }
         //***************************************************************
         private static void menu()
         {
-            Console.WriteLine("------MENU-----");
+            Console.WriteLine("     MENU PRINCIPAL");
+            Console.WriteLine("************************");
             Console.WriteLine();
             Console.WriteLine("1 -> CARGAR NUEVA PARTIDA"); 
             Console.WriteLine("2 -> MOSTRAR PERSONAJE PRINCIPAL");
             Console.WriteLine("3 -> JUGAR UNA PARTIDA");
             Console.WriteLine("4 -> MOSTRAR JUGADORES");
             Console.WriteLine("5 -> MOSTRAR GANADORES");
+            Console.WriteLine("6 -> ELIMINAR PARTIDA GUARDADA");
             Console.WriteLine("0 -> SALIR");
             Console.WriteLine();
         }
@@ -122,31 +131,37 @@ namespace rpg
             int opc=1;
             while(opc!=0)
             {
+                string? opcaux="";
                 if(jugadores.Count!=0||File.Exists("jugadores.json"))
                 {
-                    Console.WriteLine("------MENU-----");
+                    Console.WriteLine("    MENU JUGAR");
+                    Console.WriteLine("*******************");
                     Console.WriteLine();
                     if (jugadores.Count!=0)
                     {
-                        Console.WriteLine("1 -> JUGAR NUEVA PARTIDA");
+                        Console.WriteLine("1 -> NUEVA PARTIDA");
                         if(File.Exists("jugadores.json"))
                         {
-                            Console.WriteLine("2 -> JUGAR PARTIDA GUARDADA");
+                            Console.WriteLine("2 -> PARTIDA GUARDADA");
                         }
                     }else{
                         if(File.Exists("jugadores.json"))
                         {
-                            Console.WriteLine("2 -> JUGAR PARTIDA GUARDADA");
+                            Console.WriteLine("2 -> PARTIDA GUARDADA");
                         }else{
                             Console.WriteLine("NO HAY PARTIDA NUEVA INICIADA");
                             Console.WriteLine("NO HAY PARTIDA GUARDADA");
                             Console.WriteLine("SALGA, INICIE Y GUARDE UNA NUEVA PARTIDA");
+                            opc=0;
                         }
                     }
                 }
-                Console.WriteLine("0 -> SALIR");
-                Console.Write("Seleccion: ");
-                string? opcaux=Console.ReadLine();
+                if(jugadores.Count!=0||File.Exists("jugadores.json"))
+                {
+                    Console.WriteLine("0 -> SALIR");
+                    Console.Write("Seleccion: ");
+                    opcaux=Console.ReadLine();
+                }                
                 Console.WriteLine();
                 if(int.TryParse(opcaux,out opc)&& opc>=0 && opc<=2)
                 {
@@ -193,6 +208,7 @@ namespace rpg
         private static List<Personaje> IniciarPartida()
         {
             Random numRan= new Random();
+            List<Personaje> jugadores=new List<Personaje>();
             //lista de nombres reducida
             string listaNombres = "nombres-2015.csv";//https://datos.gob.ar/dataset/otros-nombres-personas-fisicas/archivo/otros_2.21
             List<string[]> LecturaListaNom= HelperCSV.LeerCsv(listaNombres, ',');
@@ -211,84 +227,116 @@ namespace rpg
             Console.WriteLine("Elija el numero correspondiente a la Provincia de la cual estara a cargo");
             List<string> nomprov=GetProvinciasArgentinas();
             List<string> nomClave=GetCivilizacion();
-            //muestra provincias en lista
-            int cant=0;
-            foreach (var item in nomprov)
+            if(nomprov.Count!=0&&nomClave.Count!=0)
             {
-                Console.WriteLine("Provincia {0}: {1}",cant,item);
-                cant++;
-            }
-            int seleccion=numRan.Next(25);
-            Console.WriteLine("Seleccion: {0}",seleccion);
-            // int seleccion= Convert.ToInt32(Console.ReadLine());
-            // if (seleccion<0||seleccion>23)
-            // {
-            //     int intentos=0;
-            //     Console.WriteLine("Ingrese un numero del 0 al 23 correspondiente a unas de la provincia de la lista");
-            //     while (intentos!=3 && (seleccion<0||seleccion>23))
-            //     {
-            //         Console.Write("Seleccion: ");
-            //         seleccion= Convert.ToInt32(Console.ReadLine()); 
-            //         intentos++;  
-            //     }
-            //     Console.WriteLine("Intentos Fallidos, salga e intente iniciar de nuevo.");
-            //     Continuar();
-            //     return new List<Personaje>();
-            // }
-            string provSelec=nomprov[seleccion];
-            Console.WriteLine("Provincia: {0}",provSelec);
-            Console.WriteLine();
-            nomprov.Remove(provSelec);
-            Personaje jugador1 = new Personaje();
-            jugador1=ConstructorPersonaje.AltaPersonaje(nom,provSelec,nomClav);
-            //Personaje jugador1 = new AltaPersonaje(nom,provSelec,nomClav);
-            List<Personaje> jugadores=new List<Personaje>();
-            jugadores.Add(jugador1);
-            //carga al azar nombres de pesonajes de una lista de nombres
-            cant=0;
-            while(cant!=23)
-            {    //seleccion de nombres al azar
-                int lng=LecturaListaNom.Count;
-                int sel=numRan.Next(0,lng);
-                string[] nomm=LecturaListaNom[sel];
-                LecturaListaNom.Remove(nomm);
-                //seleccion de provincias al azar
-                int lng2=nomprov.Count;
-                int sel2=numRan.Next(0,lng2);
-                string noomprov=nomprov[sel2];
-                nomprov.Remove(noomprov);
-                //seleccion de nombre Clave al azar
-                int lng3=nomClave.Count;
-                int sel3=numRan.Next(0,lng3);
-                string nomC=nomClave[sel3];
-                nomClave.Remove(nomC);
-                //pasamos los datos para generar datos personaje
-                jugadores.Add(ConstructorPersonaje.AltaPersonaje(nomm[0],noomprov, nomC));
-                cant++;
-            }
-            if (File.Exists("jugadores.json"))
-            {
-                Console.WriteLine("Ud. tiene una partida guardada");
-                Console.WriteLine("¿QUIERE REMPLAZARLA CON LA NUEVA PARTIDA?");
+                //muestra provincias en lista
+                int cant=0;
+                foreach (var item in nomprov)
+                {
+                    Console.WriteLine("Provincia {0}: {1}",cant,item);
+                    cant++;
+                }
+                int seleccion=numRan.Next(24);
+                Console.WriteLine("Seleccion: {0}",seleccion);
+                // int seleccion= Convert.ToInt32(Console.ReadLine());
+                // if (seleccion<0||seleccion>23)
+                // {
+                //     int intentos=0;
+                //     Console.WriteLine("Ingrese un numero del 0 al 23 correspondiente a unas de la provincia de la lista");
+                //     while (intentos!=3 && (seleccion<0||seleccion>23))
+                //     {
+                //         Console.Write("Seleccion: ");
+                //         seleccion= Convert.ToInt32(Console.ReadLine()); 
+                //         intentos++;  
+                //     }
+                //     Console.WriteLine("Intentos Fallidos, salga e intente iniciar de nuevo.");
+                //     Continuar();
+                //     return new List<Personaje>();
+                // }
+                string provSelec=nomprov[seleccion];
+                Console.WriteLine("Provincia: {0}",provSelec);
+                Console.WriteLine();
+                nomprov.Remove(provSelec);
+                Personaje jugador1 = new Personaje();
+                jugador1=ConstructorPersonaje.AltaPersonaje(nom,provSelec,nomClav);
+                Console.WriteLine("DATOS Y CARACTERISTICAS JUGADOR PRINCIPAL");
+                Console.WriteLine();
+                Jugador.MuestraDatos(jugador1);
+                Console.WriteLine();
+                Jugador.MuestraCaracter(jugador1);
+                Console.WriteLine();
+                //Personaje jugador1 = new AltaPersonaje(nom,provSelec,nomClav);
+                jugadores.Add(jugador1);
+                //carga al azar nombres de pesonajes de una lista de nombres
+                Console.WriteLine("CARGANDO DATOS DE LOS OPONENTES...");
+                cant=0;
+                while(cant!=23)
+                {    //seleccion de nombres al azar
+                    int lng=LecturaListaNom.Count;
+                    int sel=numRan.Next(lng);
+                    string[] nomm=LecturaListaNom[sel];
+                    LecturaListaNom.Remove(nomm);
+                    //seleccion de provincias al azar
+                    int lng2=nomprov.Count;
+                    int sel2=numRan.Next(lng2);
+                    string noomprov=nomprov[sel2];
+                    nomprov.Remove(noomprov);
+                    //seleccion de nombre Clave al azar
+                    int lng3=nomClave.Count;
+                    int sel3=numRan.Next(lng3);
+                    string nomC=nomClave[sel3];
+                    nomClave.Remove(nomC);
+                    //pasamos los datos para generar datos personaje
+                    jugadores.Add(ConstructorPersonaje.AltaPersonaje(nomm[0],noomprov, nomC));
+                    cant++;
+                }
+                Console.WriteLine("DATOS DE LOS OPONENTES CARGADOS.");
+                Console.WriteLine();
+                if (File.Exists("jugadores.json"))
+                {
+                    Console.WriteLine("Ud. tiene una partida guardada");
+                    Console.WriteLine("¿QUIERE REMPLAZARLA CON LA NUEVA PARTIDA?");
+                }else{
+                    Console.WriteLine("¿QUIERE GUARDAR LA NUEVA PARTIDA CREADA?");
+                }
+                Console.WriteLine("1--> SI");
+                Console.WriteLine("2--> NO");
+                Console.Write("Seleccion: ");
+                //******
+                string? opcaux=Console.ReadLine();
+                int seleccion2;
+                Console.WriteLine();
+                if(!(int.TryParse(opcaux,out seleccion2)&& seleccion2>=1 && seleccion2<=2))
+                {
+                    Console.WriteLine("==========================================");
+                    Console.WriteLine("Ingreso una opcion invalida");
+                    Console.WriteLine("LA PARTIDA SE INICIARA PERO NO SE GUARDARA");
+                    Console.WriteLine("==========================================");
+                    seleccion2=2;
+                }
+                //**
+                //int seleccion2= Convert.ToInt32(Console.ReadLine());
+                if (seleccion2==1)
+                {
+                    Console.WriteLine();
+                    GuardarPartida(jugadores);
+                    Console.WriteLine("PARTIDA CREADA Y GUARDADA...");
+                    Console.WriteLine("SALGA Y JUEGUE A SU NUEVA PARTIDA");
+                }else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("PARTIDA CREADA...");
+                    Console.WriteLine("SALGA Y JUEGUE A SU NUEVA PARTIDA");
+                }
+                Console.WriteLine();
+                Continuar();
             }else{
-                Console.WriteLine("¿QUIERE GUARDAR LA NUEVA PARTIDA CREADA?");
+                Console.WriteLine("==============================");
+                Console.WriteLine("ERROR AL INICIAR LA PARTIDA");
+                Console.WriteLine("==============================");
+                Console.WriteLine(" INTENTELO DE NUEVO");
+                Console.WriteLine("==============================");
             }
-            Console.WriteLine("1--> SI");
-            Console.WriteLine("2--> NO");
-            Console.Write("Seleccion: ");
-            int seleccion2= Convert.ToInt32(Console.ReadLine());
-            if (seleccion2==1)
-            {
-                Console.WriteLine();
-                GuardarPartida(jugadores);
-                Console.WriteLine("PARTIDA CREADA Y GUARDADA...");
-            }else
-            {
-                Console.WriteLine();
-                Console.WriteLine("PARTIDA CREADA...");
-            }
-            Console.WriteLine();
-            Continuar();
             return jugadores;
         }
         //************************************************************
@@ -323,8 +371,6 @@ namespace rpg
             {
                 Console.WriteLine("==============================");
                 Console.WriteLine(" Problemas de acceso a la API \n"+ex.Message);
-                Console.WriteLine("==============================");
-                Console.WriteLine(" INTENTELO DE NUEVO\n");
                 Console.WriteLine("==============================");
             }
             return NomProv;
@@ -410,6 +456,7 @@ namespace rpg
             Console.WriteLine("===================================");
             Console.WriteLine();
             Console.WriteLine("PARTIDA NUEVA");
+            Console.WriteLine("*************");
             if(jugadores.Count!=0)
             {
                 Console.WriteLine();
@@ -423,6 +470,7 @@ namespace rpg
             }
             Console.WriteLine();
             Console.WriteLine("PARTIDA GUARDADA");
+            Console.WriteLine("*****************");
             string dir ="";
             const string NombreArchivo = "jugadores.json";
             string ruta=dir+NombreArchivo;
@@ -440,6 +488,7 @@ namespace rpg
                 Console.WriteLine("NO HAY PARTIDA GUARDADA");
                 Console.WriteLine("Salga e inicie una nueva partida y guarde los datos");
             }
+            Continuar();
             Console.WriteLine();
         }
         //****************************************************
@@ -481,7 +530,7 @@ namespace rpg
                 //****************************************************
         private static void Jugar2(List<Personaje> jugadores)
         {
-            if (jugadores.Count>1)
+            if (jugadores.Count>0)
             {
                 Personaje jugador0=jugadores[0];
                 Random numRan= new Random();
@@ -511,30 +560,29 @@ namespace rpg
                     if (ganador==jugador1)
                     {
                         jugadores.Add(jugador1);
-                        //Jugador.CargarPremio(jugador1);
                     }else{
                         jugadores.Add(jugador2);
-                        //Jugador.CargarPremio(jugador2);
                     }
+                    //Jugador.CargarPremio(ganador);
                     if (jugadores.Count==1)
                     {
                         GuardarGanador(ganador);
                         if (ganador==jugador0)
                         {
-                            Console.WriteLine("\n________________GANADOR_______________");
-                            Console.WriteLine("|                                    |");
-                            Console.WriteLine($"              {ganador.Nombre}                 ");
-                            Console.WriteLine("|____________________________________|");
+                            Console.WriteLine("\n         GANADOR FINAL");
+                            Console.WriteLine("++++++++++++++++++++++++++++++++++++++");
+                            Console.WriteLine($"         {ganador.Nombre}            ");
+                            Console.WriteLine("++++++++++++++++++++++++++++++++++++++");
                             Jugador.CargarPremio(ganador);
                         }else{
-                            Console.WriteLine("___________________________________");
-                            Console.WriteLine("|                                  |");
-                            Console.WriteLine("|             GAME OVER            |");
-                            Console.WriteLine("|         Intentelo de NUEVO       |");
-                            Console.WriteLine("|      Inicie una nueva Partida    |");
-                            Console.WriteLine("|__________________________________|");
+                            Console.WriteLine("++++++++++++++++++++++++++++++++++++++");
+                            Console.WriteLine("             GAME OVER            ");
+                            Console.WriteLine("         Intentelo de NUEVO       ");
+                            Console.WriteLine("      Inicie una NUEVA PARTIDA    ");
+                            Console.WriteLine("++++++++++++++++++++++++++++++++++++++");
                             Console.WriteLine();
                             Console.WriteLine($"Ganador Final: {ganador.Nombre}");
+                            Jugador.CargarPremio(ganador);
                             Continuar();
                         }
                     }
@@ -618,19 +666,20 @@ namespace rpg
             {
                 if(jugadores.Count!=0||File.Exists("jugadores.json"))
                 {
-                    Console.WriteLine("------MENU-----");
+                    Console.WriteLine("MENU MUESTRA JUGADORES");
+                    Console.WriteLine("**********************");
                     Console.WriteLine();
                     if (jugadores.Count!=0)
                     {
-                        Console.WriteLine("1 -> JUGADORES NUEVA PARTIDA");
+                        Console.WriteLine("1 -> NUEVA PARTIDA");
                         if(File.Exists("jugadores.json"))
                         {
-                            Console.WriteLine("2 -> JUGADORES PARTIDA GUARDADA");
+                            Console.WriteLine("2 -> PARTIDA GUARDADA");
                         }
                     }else{
                         if(File.Exists("jugadores.json"))
                         {
-                            Console.WriteLine("2 -> JUGADORES PARTIDA GUARDADA");
+                            Console.WriteLine("2 -> PARTIDA GUARDADA");
                         }else{
                             Console.WriteLine("NO HAY PARTIDA NUEVA INICIADA");
                             Console.WriteLine("NO HAY PARTIDA GUARDADA");
@@ -639,16 +688,24 @@ namespace rpg
                         }
                     }
                 }
-                //***************
-                // Console.WriteLine("------MENU-----");
-                // Console.WriteLine();
-                // Console.WriteLine("1 -> JUGADORES NUEVA PARTIDA");
-                // Console.WriteLine("2 -> JUGADORES PARTIDA GUARDADA");
                 if(jugadores.Count!=0||File.Exists("jugadores.json"))
                 {
                     Console.WriteLine("0 -> SALIR");
                     Console.Write("Seleccion: ");
-                    opc= Convert.ToInt32(Console.ReadLine());
+                    //opc= Convert.ToInt32(Console.ReadLine());
+                    //*******
+                    Console.Write("Seleccion: ");
+                    string? opcaux=Console.ReadLine();
+                    //opc= Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                    if(!(int.TryParse(opcaux,out opc)&& opc>=0 && opc<=2))
+                    {
+                        Console.WriteLine("===========================");
+                        Console.WriteLine(" Ingrese una opcion Valida");
+                        Console.WriteLine("===========================");
+                        opc=10;
+                        Console.WriteLine();
+                    }
                 }else{
                     opc=0;
                 }
@@ -685,7 +742,9 @@ namespace rpg
         private static void MostrarJugadores(List<Personaje> jugadores)
         {
             int cont=1;
-            Console.WriteLine("----------------Jugadores-----------------"); 
+            Console.WriteLine("JUGADORES");
+            Console.WriteLine("**********");
+            Console.WriteLine();
             foreach (var item in jugadores)
             {
                 Console.WriteLine("{0} --> Nombre: {1}; Territorio a Cargo: {2}",cont,item.Nombre,item.Territorio);
@@ -699,7 +758,9 @@ namespace rpg
             if (File.Exists(archivo))//validacion de su existencia
             {
                 List<string[]> nuevo=HelperCSV.LeerCsv(archivo,',');
-                Console.WriteLine("-------------------GANADORES-------------------");
+                Console.WriteLine("GANADORES");
+                Console.WriteLine("**********");
+                Console.WriteLine();
                 foreach (var item in nuevo)
                 {
                     Console.WriteLine("Fecha {0} --> Nombre: {1}; Territorio a Cargo: {2}",item[0],item[1],item[2]);

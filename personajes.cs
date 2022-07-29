@@ -57,7 +57,7 @@ namespace rpg
         public static void MuestraDatos(Personaje personaje){
             Console.WriteLine("Datos del Personaje");
             Console.WriteLine("-------------------");
-            Console.WriteLine("Tipo de Caracter:............. {0}", Enum.GetName(typeof(Personaje.Tipos), personaje.Tipo));
+            Console.WriteLine("Tipo de Carácter:............. {0}", Enum.GetName(typeof(Personaje.Tipos), personaje.Tipo));
             Console.WriteLine("Nombre:....................... "+personaje.Nombre);
             Console.WriteLine("Nombre Clave:................. {0}", personaje.Apodo);
             Console.WriteLine("Fecha de nacimiento:.......... {0:d}", personaje.FecNac);
