@@ -170,6 +170,32 @@ namespace rpg
             }
             Console.WriteLine();
         }
+        public static void CargarPremio2(Personaje p1){
+            Random numRan= new Random();
+            int a;
+            a=numRan.Next(1,6);
+            switch (a)
+            {
+                case 1:
+                    p1.Fuerza=PremioFuerza(p1.Fuerza);
+                    break;
+                case 2:
+                    p1.Destreza=PremioFuerza(p1.Destreza);
+                    break;
+                case 3:
+                    p1.Nivel=PremioFuerza(p1.Nivel);
+                    break;
+                case 4:
+                    PremioSalud(p1);
+                    break; 
+                case 5:
+                    p1.Velocidad=PremioFuerza(p1.Velocidad);
+                    break;
+                case 6:
+                    p1.Armadura=PremioFuerza(p1.Armadura);
+                    break; 
+            }
+        }
         
     }
 }

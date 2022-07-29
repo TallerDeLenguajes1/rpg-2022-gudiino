@@ -558,14 +558,17 @@ namespace rpg
                         Console.WriteLine("Ganador: {0}",ganador.Nombre);
                         Console.WriteLine();
                     }
-                    //muestra final de la salud de los jugadores
+                    //muestra final del ganador
+                    // if (jugadores.Count>1)
+                    // {
+                    //     Jugador.CargarPremio(ganador);
+                    // }
                     if (ganador==jugador1)
                     {
                         jugadores.Add(jugador1);
                     }else{
                         jugadores.Add(jugador2);
                     }
-                    //Jugador.CargarPremio(ganador);
                     if (jugadores.Count==1)
                     {
                         GuardarGanador(ganador);
@@ -585,6 +588,8 @@ namespace rpg
                             Console.WriteLine();
                             Console.WriteLine($"Ganador Final: {ganador.Nombre}");
                             Jugador.CargarPremio(ganador);
+                            Console.WriteLine();
+                            Console.WriteLine("PARA VOLVER A JUGAR, VUELVA AL MENU ANTERIOR");
                             Continuar();
                         }
                     }
