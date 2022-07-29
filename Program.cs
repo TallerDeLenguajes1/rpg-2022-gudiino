@@ -101,7 +101,9 @@ namespace rpg
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
-            Continuar();
+            Console.WriteLine("ENTER para IR al MENU");
+            Console.ReadLine();
+            Console.WriteLine();
         }
         //*****************************************************************
         private static void Continuar()
